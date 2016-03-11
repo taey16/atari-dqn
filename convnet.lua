@@ -1,6 +1,5 @@
 --[[
 Copyright (c) 2014 Google Inc.
-
 See LICENSE file for full terms of limited license.
 ]]
 
@@ -10,9 +9,6 @@ require 'cudnn'
 function create_network(args)
   local net = nn.Sequential()
   net:add(nn.Reshape(unpack(args.input_dims)))
-
-  --- first convolutional layer
-  --local convLayer = cudnn.SpatialConvolution
 
   net:add(cudnn.SpatialConvolution(
     args.hist_len*args.ncols, args.n_units[1],
@@ -32,8 +28,7 @@ function create_network(args)
     net:add(cudnn.ReLU(true))
   end
 
-  local nel = net:cuda():forward(torch.zeros(1,unpack(args.input_dims))
-        :cuda()):nElement()
+  local nel = net:cuda():forward(torch.zeros(1,unpack(args.input_dims)):cuda()):nElement()
 
   -- reshape all feature planes into a vector per example
   net:add(nn.Reshape(nel))
