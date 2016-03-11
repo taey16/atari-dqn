@@ -51,7 +51,7 @@ while step < opt.steps do
     end
   end
 
-  if X11 then win = image.display({image=screen, win=win}) end
+  if opt.X11 then win = image.display({image=screen, win=win}) end
 
   if step % opt.prog_freq == 0 then
     assert(step==agent.numSteps, 'trainer step: ' .. step ..
@@ -79,7 +79,7 @@ while step < opt.steps do
       -- Play game in test mode (episodes don't end when losing a life)
       screen, reward, terminal = game_env:step(game_actions[action_index])
 
-      if X11 then win = image.display({image=screen, win=win}) end
+      if opt.X11 then win = image.display({image=screen, win=win}) end
       if estep % 1000 == 0 then collectgarbage() end
 
       episode_reward = episode_reward + reward

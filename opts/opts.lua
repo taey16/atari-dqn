@@ -1,7 +1,9 @@
 
 require 'paths'
 
-local env_name = 'breakout'
+local env_name = 
+  'seaquest'
+  --'breakout'
 local rom_path = 'roms'
 local actrep = 4
 local agent_filename = 'NeuralQLearner'
@@ -10,7 +12,7 @@ local agent_params =
 
 local checkpoint_agent_name = ('DQN3_0_1_%s_FULL_Y_TEST'):format(env_name)
 local checkpoint_path = string.format('/storage/atari/%s/%s', env_name, checkpoint_agent_name)
-local X11 = false
+local X11 = true
 
 local cmd = torch.CmdLine()
 cmd:text()
@@ -35,9 +37,9 @@ cmd:option('-agent_params', agent_params, 'string of agent parameters')
 cmd:option('-seed', 1, 'fixed input seed for repeatable experiments')
 cmd:option('-saveNetworkParams', false,
   'saves the agent network in a separate file')
-cmd:option('-prog_freq', 32000, 'frequency of progress output')
+cmd:option('-prog_freq', 3200, 'frequency of progress output')
 cmd:option('-save_freq', 125000, 'the model is saved every save_freq steps')
-cmd:option('-eval_freq', 320, 'frequency of greedy evaluation')
+cmd:option('-eval_freq', 32000, 'frequency of greedy evaluation')
 cmd:option('-save_versions', 0, '')
 
 cmd:option('-steps', 50000000, 'number of training steps to perform')
@@ -48,6 +50,7 @@ cmd:option('-verbose', 2,
 cmd:option('-threads', 4, 'number of BLAS threads')
 cmd:option('-gpus', {1,2}, 'gpu flag')
 cmd:option('--checkpoint_path', checkpoint_path, 'checkpoint path')
+cmd:option('--X11', X11, 'use X11 or not')
 
 cmd:text()
 
