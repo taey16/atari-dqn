@@ -154,7 +154,7 @@ while step < opt.steps do
     agent.w, agent.dw, agent.g, agent.g2, agent.delta, agent.delta2,
       agent.deltas, agent.tmp = nil, nil, nil, nil, nil, nil, nil, nil
 
-    local filename = opt.checkpoint_path
+    local filename = paths.concat(opt.checkpoint_path, 'model')
     if opt.save_versions > 0 then
       filename = filename .. "_" .. math.floor(step / opt.save_versions)
     end
