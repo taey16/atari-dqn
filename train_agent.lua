@@ -68,13 +68,12 @@ while step < opt.steps do
   -- eval
   if step % opt.eval_freq == 0 and step > learn_start then
     screen, reward, terminal = game_env:newGame()
+    local eval_time = sys.clock()
 
     total_reward = 0
     nrewards = 0
     nepisodes = 0
     episode_reward = 0
-
-    local eval_time = sys.clock()
     for estep=1,opt.eval_steps do
       local action_index = agent:perceive(reward, screen, terminal, true, 0.05)
       -- Play game in test mode (episodes don't end when losing a life)

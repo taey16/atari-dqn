@@ -91,7 +91,7 @@ function nql:__init(args)
     self.network = err
     self.network = self:network()
   end
-
+  -- weight's init to conv, bn, linear layers
   MSRinit(self.network)
 
   cudnn.fastest = true
@@ -110,6 +110,8 @@ function nql:__init(args)
   msg, err = pcall(require, self.preproc)
   if not msg then
     error("Error loading preprocessing net")
+  else
+    io.flush(print(string.format('Preprocessing net: %s', self.preproc)))
   end
   self.preproc = err
   self.preproc = self:preproc()
@@ -322,7 +324,7 @@ function nql:perceive(reward, rawstate, terminal, testing, testing_ep)
     self:sample_validation_data()
   end
 
-  curState= self.transitions:get_recent()
+  curState = self.transitions:get_recent()
   curState = curState:resize(1, unpack(self.input_dims))
 
   -- Select action
