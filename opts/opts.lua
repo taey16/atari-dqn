@@ -35,7 +35,7 @@ cmd:option('-agent_params', agent_params, 'string of agent parameters')
 cmd:option('-seed', 1, 'fixed input seed for repeatable experiments')
 cmd:option('-saveNetworkParams', false,
   'saves the agent network in a separate file')
-cmd:option('-prog_freq', 32, 'frequency of progress output')
+cmd:option('-prog_freq', 32000, 'frequency of progress output')
 cmd:option('-save_freq', 125000, 'the model is saved every save_freq steps')
 cmd:option('-eval_freq', 320, 'frequency of greedy evaluation')
 cmd:option('-save_versions', 0, '')

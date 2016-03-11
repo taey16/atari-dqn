@@ -141,7 +141,7 @@ while step < opt.steps do
       step, step*opt.actrep, total_reward, agent.ep, agent.lr, time_dif,
       training_rate, eval_time, opt.actrep*opt.eval_steps/eval_time,
       nepisodes, nrewards)))
-  end
+  end -- end of eval
 
   if step % opt.save_freq == 0 or step == opt.steps then
     local s, a, r, s2, term = agent.valid_s, agent.valid_a, agent.valid_r,
@@ -180,5 +180,5 @@ while step < opt.steps do
       agent.deltas, agent.tmp = w, dw, g, g2, delta, delta2, deltas, tmp
     io.flush(print('Saved:', filename .. '.t7'))
     collectgarbage()
-  end
-end
+  end -- end of save
+end -- end of main loop

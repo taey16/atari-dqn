@@ -70,7 +70,7 @@ function nql:__init(args)
   local network_function
   if not (type(self.network) == 'string') then
     error("The type of the network provided in NeuralQLearner" ..
-          " is not a string!")
+      " is not a string!")
   end
 
   local msg, err = pcall(require, self.network)
@@ -99,6 +99,7 @@ function nql:__init(args)
   cudnn.verbose = false
   if #self.gpus > 1 then
     self.network = parallel_utils.makeDataParallel(self.network, self.gpus)
+    print(self.network)
   else
     self.network:cuda()
   end
