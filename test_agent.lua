@@ -11,10 +11,12 @@ require "initenv"
 local opt = require 'opts.opts'
 opt.network = paths.concat(opt.checkpoint_path, 'model.t7')
 opt.gif_file= paths.concat(opt.checkpoint_path, 'gifs/test.gif')
-opt.csv_file= paths.concat(opt.checkpoint_path,'csv/test.csv')
+opt.csv_file= paths.concat(opt.checkpoint_path, 'csv/test.csv')
+opt.best = true
 
 --- General setup.
 local game_env, game_actions, agent, opt = setup(opt)
+agent.network:evaluate()
 -- file names from command line
 local gif_filename = opt.gif_file
 -- start a new game

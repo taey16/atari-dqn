@@ -15,6 +15,7 @@ local logger_tst_avg =
 
 --- General setup.
 local game_env, game_actions, agent, opt = setup(opt)
+agent.network:training()
 
 local learn_start = agent.learn_start
 local start_time = sys.clock()
@@ -58,8 +59,8 @@ while step < opt.steps do
         ' & agent.numSteps: ' .. agent.numSteps)
     io.flush(print("Steps: ", step))
     agent:report()
-    io.flush(print(string.format(
-      '%d, action idx: %d, reward: %f', step, action_index, reward)))
+    --io.flush(print(string.format(
+    --  '%d, action idx: %d, reward: %f', step, action_index, reward)))
     collectgarbage()
   end
 
@@ -103,19 +104,19 @@ while step < opt.steps do
 
     if #reward_history == 0 then
       io.flush(print(string.format(
-        '===> saving best_model, total_reward: %d, prev_best: 0', 
+        '===> saving best_model, total_reward: %f, prev_best: 0', 
         total_reward)))
       agent.best_network = agent.network:clone()
-    elseif #reward_history > 1 then
+    elseif #reward_history > 0 then
       local previous_best_reward = torch.Tensor(reward_history):max()
       if total_reward > previous_best_reward then
         io.flush(print(string.format(
-          '===> saving best_model, total_reward: %d, prev_best: %d', 
+          '===> saving best_model, total_reward: %f, prev_best: %f', 
           total_reward, previous_best_reward)))
         agent.best_network = agent.network:clone()
       else
         io.flush(print(string.format(
-          '===> skipping best_model, total_reward: %d, prev_best: %d', 
+          '===> skipping best_model, total_reward: %f, prev_best: %f', 
           total_reward, previous_best_reward)))
       end
     end

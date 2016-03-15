@@ -5,14 +5,16 @@ local env_name =
   --'seaquest'
   'breakout'
 local rom_path = 'roms'
-local actrep = 6
+local actrep = 4
 local agent_filename = 'NeuralQLearner'
 local agent_params = 
   'lr=0.00025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
 
-local checkpoint_agent_name = ('DQN3_0_1_%s_FULL_Y_TEST_TEST'):format(env_name)
+local checkpoint_agent_name = 
+  ('DQN3_0_1_%s_FULL_Y_TEST_TEST'):format(env_name)
+  --('DQN3_0_1_%s_FULL_Y_TEST_TEST_TEST'):format(env_name)
 local checkpoint_path = string.format('/storage/atari/%s/%s', env_name, checkpoint_agent_name)
-local X11 = true
+local X11 = false
 
 local cmd = torch.CmdLine()
 cmd:text()

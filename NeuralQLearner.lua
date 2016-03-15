@@ -254,10 +254,8 @@ function nql:qLearnMinibatch()
 
   -- zero gradients of parameters
   self.dw:zero()
-
   -- get new gradient
   self.network:backward(s, targets)
-
   -- add weight cost to gradient
   self.dw:add(-self.wc, self.w)
 
