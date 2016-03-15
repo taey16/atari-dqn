@@ -102,10 +102,21 @@ while step < opt.steps do
     total_reward = total_reward/math.max(1, nepisodes)
 
     if #reward_history == 0 then
-      local current_best_reward = torch.Tensor(reward_history):max()
-      if total_reward > current_best_reward then
-        io.flush(print(string.format('saving best_model, total_reward: %d, prev_best: %d', total_reward, current_best_reward)))
+      io.flush(print(string.format(
+        '===> saving best_model, total_reward: %d, prev_best: 0', 
+        total_reward)))
+      agent.best_network = agent.network:clone()
+    elseif #reward_history > 1 then
+      local previous_best_reward = torch.Tensor(reward_history):max()
+      if total_reward > previous_best_reward then
+        io.flush(print(string.format(
+          '===> saving best_model, total_reward: %d, prev_best: %d', 
+          total_reward, previous_best_reward)))
         agent.best_network = agent.network:clone()
+      else
+        io.flush(print(string.format(
+          '===> skipping best_model, total_reward: %d, prev_best: %d', 
+          total_reward, previous_best_reward)))
       end
     end
 
@@ -177,12 +188,11 @@ while step < opt.steps do
       local nets = {network=w:clone():float()}
       torch.save(filename..'.params.t7', nets, 'ascii')
     end
-    io.flush(print(string.format('===> save done in %s', filename)))
     agent.valid_s, agent.valid_a, agent.valid_r, agent.valid_s2,
       agent.valid_term = s, a, r, s2, term
     agent.w, agent.dw, agent.g, agent.g2, agent.delta, agent.delta2,
       agent.deltas, agent.tmp = w, dw, g, g2, delta, delta2, deltas, tmp
-    io.flush(print('Saved:', filename .. '.t7'))
+    io.flush(print('===> Saved:', filename .. '.t7'))
     collectgarbage()
   end -- end of save
 end -- end of main loop
