@@ -82,17 +82,21 @@ function nql:__init(args)
       error(string.format("Could not find network file %s", self.network))
     end
     if self.best and exp.best_model then
+      io.flush(print(string.format(
+        'load pretrained best_model: %s', self.network)))
       self.network = exp.best_model
     else
+      io.flush(print(string.format(
+        'load pretrained model: %s', self.network)))
       self.network = exp.model
     end
   else
     print('Creating Agent Network from ' .. self.network)
     self.network = err
     self.network = self:network()
+    -- weight's init to conv, bn, linear layers
+    MSRinit(self.network)
   end
-  -- weight's init to conv, bn, linear layers
-  MSRinit(self.network)
 
   cudnn.fastest = true
   cudnn.benchmark = true

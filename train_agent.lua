@@ -101,8 +101,12 @@ while step < opt.steps do
     local ind = #reward_history+1
     total_reward = total_reward/math.max(1, nepisodes)
 
-    if #reward_history == 0 or total_reward > torch.Tensor(reward_history):max() then
-      agent.best_network = agent.network:clone()
+    if #reward_history == 0 then
+      local current_best_reward = torch.Tensor(reward_history):max()
+      if total_reward > current_best_reward then
+        io.flush(print(string.format('saving best_model, total_reward: %d, prev_best: %d', total_reward, current_best_reward)))
+        agent.best_network = agent.network:clone()
+      end
     end
 
     if agent.v_avg then
