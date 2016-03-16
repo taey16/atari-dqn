@@ -304,6 +304,7 @@ function nql:perceive(reward, rawstate, terminal, testing, testing_ep)
   local state = self:preprocess(rawstate):float()
   local curState
 
+  -- normalized DQN
   if self.max_reward then
     reward = math.min(reward, self.max_reward)
   end
@@ -354,6 +355,10 @@ function nql:perceive(reward, rawstate, terminal, testing, testing_ep)
   self.lastAction = actionIndex
   self.lastTerminal = terminal
 
+  -- Freeze target Q-network
+  -- periodically update w^{-} <-- w
+  --- avoid oscillations
+  --- break correlations between Q-neetwork and target
   if self.target_q and self.numSteps % self.target_q == 1 then
     self.target_network = self.network:clone()
   end

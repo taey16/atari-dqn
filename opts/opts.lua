@@ -11,8 +11,8 @@ local agent_params =
   'lr=0.00025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
 
 local checkpoint_agent_name = 
-  ('DQN3_0_1_%s_FULL_Y_TEST_TEST'):format(env_name)
-  --('DQN3_0_1_%s_FULL_Y_TEST_TEST_TEST'):format(env_name)
+  ('DQN3_0_1_%s_FULL_Y_FULL_BN'):format(env_name)
+  --('DQN3_0_1_%s_FULL_Y_TEST_TEST_NO_BN'):format(env_name)
 local checkpoint_path = string.format('/storage/atari/%s/%s', env_name, checkpoint_agent_name)
 local X11 = false
 
@@ -32,7 +32,6 @@ cmd:option('-actrep', actrep, 'how many times to repeat action')
 cmd:option('-random_starts', 30, 'play action 0 between 1 and random_starts ' ..
   'number of times at the start of each training episode')
 
-cmd:option('-checkpoint_path', checkpoint_path, 'filename used for saving network and training history')
 cmd:option('-network', '', 'reload pretrained network')
 cmd:option('-agent', agent_filename, 'name of agent file to use')
 cmd:option('-agent_params', agent_params, 'string of agent parameters')
@@ -53,7 +52,7 @@ cmd:option('-threads', 4, 'number of BLAS threads')
 cmd:option('-gpus', {1}, 'gpu flag')
 --cmd:option('--checkpoint_agent_filename', checkpoint_agent_filename,
 --  'checkpoint agent filename')
-cmd:option('--checkpoint_path', checkpoint_path, 'checkpoint path')
+cmd:option('-checkpoint_path', checkpoint_path, 'filename used for saving network and training history')
 cmd:option('--X11', X11, 'use X11 or not')
 
 cmd:text()

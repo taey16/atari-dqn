@@ -9,10 +9,14 @@ local gd = require "gd"
 require "initenv"
 
 local opt = require 'opts.opts'
+opt.checkpoint_path = 
+  '/storage/atari/breakout/DQN3_0_1_breakout_FULL_Y_TEST_TEST'
+  --'/storage/atari/breakout/DQN3_0_1_breakout_FULL_Y_TEST'
 opt.network = paths.concat(opt.checkpoint_path, 'model.t7')
 opt.gif_file= paths.concat(opt.checkpoint_path, 'gifs/test.gif')
-opt.csv_file= paths.concat(opt.checkpoint_path, 'csv/test.csv')
+--opt.csv_file= paths.concat(opt.checkpoint_path, 'csv/test.csv')
 opt.best = true
+opt.X11 = false
 
 --- General setup.
 local game_env, game_actions, agent, opt = setup(opt)
@@ -41,6 +45,7 @@ if opt.X11 then win = image.display({image=screen}) end
 
 print("Started playing...")
 local step = 0
+local total_reward = 0
 -- play one episode (game)
 while not terminal do
     -- if action was chosen randomly, Q-value is 0
@@ -49,12 +54,14 @@ while not terminal do
     local action_index = agent:perceive(reward, screen, terminal, true, 0.05)
     -- play game in test mode (episodes don't end when losing a life)
     screen, reward, terminal = game_env:step(game_actions[action_index], false)
+    total_reward = total_reward + reward
 
     -- display screen
     if opt.X11 then image.display({image=screen, win=win}) end
 
     io.flush(print(string.format(
-      'step: %d, action_index: %d, reward: %f, terminal: %s', step, action_index, reward, tostring(terminal)))) 
+      'step: %d, action_index: %d, reward: %f, total_reward: %f, terminal: %s', 
+      step, action_index, reward, total_reward, tostring(terminal)))) 
     step = step + 1
     -- create gd image from tensor
     jpg = image.compressJPG(screen:squeeze(), 100)

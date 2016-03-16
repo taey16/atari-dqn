@@ -42,12 +42,13 @@ function create_network(args)
     -- add Linear layer
     last_layer_size = args.n_hid[i+1]
     net:add(nn.Linear(args.n_hid[i], last_layer_size))
+    net:add(cudnn.BatchNormalization(last_layer_size, 0.00001, nil, true))
     net:add(cudnn.ReLU(true))
   end
 
   -- add the last fully connected layer (to actions)
   net:add(nn.Linear(last_layer_size, args.n_actions))
-  --net:add(cudnn.BatchNormalization(args.n_actions, 0.00001, nil, true))
+  net:add(cudnn.BatchNormalization(args.n_actions, 0.00001, nil, true))
 
   net:cuda()
   if args.verbose >= 2 then
