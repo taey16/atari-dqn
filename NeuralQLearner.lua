@@ -96,6 +96,7 @@ function nql:__init(args)
     self.network = self:network()
     -- weight's init to conv, bn, linear layers
     MSRinit(self.network)
+    io.flush(print('MSRinit done'))
   end
 
   cudnn.fastest = true
