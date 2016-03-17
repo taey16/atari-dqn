@@ -76,6 +76,7 @@ while step < opt.steps do
     nepisodes = 0
     episode_reward = 0
     for estep=1,opt.eval_steps do
+      -- testing: true, e-greed: 0.05
       local action_index = agent:perceive(reward, screen, terminal, true, 0.05)
       -- Play game in test mode (episodes don't end when losing a life)
       screen, reward, terminal = game_env:step(game_actions[action_index])

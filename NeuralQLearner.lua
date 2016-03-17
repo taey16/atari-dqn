@@ -343,6 +343,7 @@ function nql:perceive(reward, rawstate, terminal, testing, testing_ep)
   --Do some Q-learning updates
   if self.numSteps > self.learn_start and not testing and
     self.numSteps % self.update_freq == 0 then
+    -- for loop in number of points to replay per learning step.
     for i = 1, self.n_replay do
       self:qLearnMinibatch()
     end
@@ -357,7 +358,7 @@ function nql:perceive(reward, rawstate, terminal, testing, testing_ep)
   self.lastTerminal = terminal
 
   -- Freeze target Q-network
-  -- periodically update w^{-} <-- w
+  -- periodically update w^{-} <-- w (self.target_q = 10000 for the paper) 
   --- avoid oscillations
   --- break correlations between Q-neetwork and target
   if self.target_q and self.numSteps % self.target_q == 1 then
@@ -373,6 +374,7 @@ end
 
 
 function nql:eGreedy(state, testing_ep)
+  -- The behavior policy during training was ε-greedy with ε annealed linearly from 1 to 0.1 over the first million frames, and fixed at 0.1 thereafter.
   self.ep = testing_ep or (self.ep_end +
               math.max(0, (self.ep_start - self.ep_end) * (self.ep_endt -
               math.max(0, self.numSteps - self.learn_start))/self.ep_endt))
