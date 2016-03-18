@@ -374,7 +374,8 @@ end
 
 
 function nql:eGreedy(state, testing_ep)
-  -- The behavior policy during training was ε-greedy with ε annealed linearly from 1 to 0.1 over the first million frames, and fixed at 0.1 thereafter.
+  -- The behavior policy during training was ε-greedy with 
+  -- ε annealed linearly from 1 to 0.1 over the first million frames, and fixed at 0.1 thereafter.
   self.ep = testing_ep or (self.ep_end +
               math.max(0, (self.ep_start - self.ep_end) * (self.ep_endt -
               math.max(0, self.numSteps - self.learn_start))/self.ep_endt))
