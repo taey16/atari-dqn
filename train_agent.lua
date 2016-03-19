@@ -8,10 +8,10 @@ require "initenv"
 local opt = require 'opts.opts'
 require 'optim'
 
-local logger_tst = 
-  optim.Logger(paths.concat(opt.checkpoint_path,'test.log' ))
-local logger_tst_avg = 
-  optim.Logger(paths.concat(opt.checkpoint_path,'test_avg.log' ))
+local logger_val = 
+  optim.Logger(paths.concat(opt.checkpoint_path,'val.log' ))
+local logger_val_avg = 
+  optim.Logger(paths.concat(opt.checkpoint_path,'val_avg.log' ))
 
 --- General setup.
 local game_env, game_actions, agent, opt = setup(opt)
@@ -126,7 +126,7 @@ while step < opt.steps do
       v_history[ind] = agent.v_avg
       td_history[ind] = agent.tderr_avg
       qmax_history[ind] = agent.q_max
-      logger_tst_avg:add{
+      logger_val_avg:add{
         ['step'] = step,
         ['v_avg'] = agent.v_avg,
         ['tderr_avg'] = agent.tderr_avg,
@@ -140,11 +140,11 @@ while step < opt.steps do
     reward_counts[ind] = nrewards
     episode_counts[ind]= nepisodes
 
-    logger_tst:add{
+    logger_val:add{
       ['step'] = step,
       ['total_reward'] = total_reward,
-      ['reward_counts'] = nrewards,
-      ['epsoid_counts'] = nepisodes
+      ['reward_counts']= nrewards,
+      ['epsoid_counts']= nepisodes
     }
 
     time_history[ind+1] = sys.clock() - start_time

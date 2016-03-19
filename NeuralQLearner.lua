@@ -14,11 +14,15 @@ local nql = torch.class('dqn.NeuralQLearner')
 
 
 function nql:__init(args)
-  self.state_dim  = args.state_dim -- State dimensionality.
+  --- env. spacific 
+  self.state_dim  = args.state_dim -- State dimensionality. (i.e. # of pixels in a screen)
   self.actions    = args.actions
   self.n_actions  = #self.actions
   self.verbose    = args.verbose
-  self.best       = args.best
+
+  --- option (weather to use best-rewared model or last updated model)
+  self.best = args.best
+  self.gpus = args.gpus
 
   --- epsilon annealing
   self.ep_start   = args.ep or 1
@@ -52,7 +56,6 @@ function nql:__init(args)
   self.target_q       = args.target_q
   self.bestq          = 0
 
-  self.gpus           = args.gpus
 
   self.ncols          = args.ncols or 1  -- number of color channels in input
   self.input_dims     = args.input_dims or {self.hist_len*self.ncols, 84, 84}
@@ -64,6 +67,7 @@ function nql:__init(args)
 
   self.transition_params = args.transition_params or {}
 
+  -- if you use pretrained network
   self.network    = args.network
 
   -- check whether there is a network file
@@ -83,7 +87,7 @@ function nql:__init(args)
     end
     if self.best and exp.best_model then
       io.flush(print(string.format(
-        'load pretrained best_model: %s', self.network)))
+        'load pretrained BEST_model: %s', self.network)))
       self.network = exp.best_model
     else
       io.flush(print(string.format(
@@ -229,8 +233,9 @@ function nql:getQUpdate(args)
   delta:add(-1, q)
 
   if self.clip_delta then
-    delta[delta:ge(self.clip_delta)] = self.clip_delta
-    delta[delta:le(-self.clip_delta)] = -self.clip_delta
+    delta:clamp(-self.clip_delta, self.clip_delta)
+    --delta[delta:ge(self.clip_delta)] = self.clip_delta
+    --delta[delta:le(-self.clip_delta)] = -self.clip_delta
   end
 
   local targets = torch.zeros(self.minibatch_size, self.n_actions):float()
@@ -251,7 +256,8 @@ function nql:qLearnMinibatch()
 
   local s, a, r, s2, term = self.transitions:sample(self.minibatch_size)
 
-  local targets, delta, q2_max = self:getQUpdate{s=s, a=a, r=r, s2=s2, term=term, update_qmax=true}
+  local targets, delta, q2_max = 
+    self:getQUpdate{s=s, a=a, r=r, s2=s2, term=term, update_qmax=true}
 
   -- zero gradients of parameters
   self.dw:zero()
@@ -368,7 +374,7 @@ function nql:perceive(reward, rawstate, terminal, testing, testing_ep)
   if not terminal then
     return actionIndex
   else
-    return 0
+    return 0, 0
   end
 end
 
