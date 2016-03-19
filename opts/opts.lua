@@ -2,8 +2,8 @@
 require 'paths'
 
 local env_name = 
-  'seaquest'
-  --'breakout'
+  --'seaquest'
+  'breakout'
 local rom_path = 'roms'
 local actrep = 4
 local agent_filename = 'NeuralQLearner'
