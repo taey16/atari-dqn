@@ -15,7 +15,7 @@ local eval_freq = 50000--250000 --frequency of greedy evaluation
 local eval_steps= 10000--125000 --number of evaluation steps
 
 local checkpoint_agent_name = 
-  ('DQN3_0_1_%s_FULL_Y_FULL'):format(env_name)
+  'DQN3_0_1_FULL_Y_FULL'
 local checkpoint_path = string.format('/storage/atari/%s/%s', env_name, checkpoint_agent_name)
 local X11 = false
 

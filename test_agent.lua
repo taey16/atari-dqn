@@ -10,13 +10,14 @@ require "initenv"
 
 local opt = require 'opts.opts'
 opt.checkpoint_path = 
-  '/storage/atari/breakout/DQN3_0_1_breakout_FULL_Y_TEST_TEST'
+  '/storage/atari/seaquest/DQN3_0_1_seaquest_FULL_Y_FULL'
+  --'/storage/atari/breakout/DQN3_0_1_breakout_FULL_Y_TEST_TEST'
   --'/storage/atari/breakout/DQN3_0_1_breakout_FULL_Y_FULL_BN'
   --'/storage/atari/breakout/DQN3_0_1_breakout_FULL_Y_TEST'
 opt.network = paths.concat(opt.checkpoint_path, 'model.t7')
 opt.gif_file= paths.concat(opt.checkpoint_path, 'gifs/test.gif')
 --opt.csv_file= paths.concat(opt.checkpoint_path, 'csv/test.csv')
-opt.best = false
+opt.best = true
 opt.X11 = false
 
 --- General setup.
