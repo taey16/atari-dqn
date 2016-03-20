@@ -14,13 +14,15 @@ opt.env_name =
   --'seaquest'
   'breakout'
 opt.checkpoint_path = 
-  ('/storage/atari/%s/DQN3_0_1_%s_FULL_Y_FULL'):format( opt.env_name, opt.env_name )
+  ('/storage/atari/%s/DQN3_0_1_FULL_Y_FULL_reinforce_lr25e-6'):format( opt.env_name, opt.env_name )
+  --('/storage/atari/%s/DQN3_0_1_%s_FULL_Y_FULL'):format( opt.env_name, opt.env_name )
 opt.network = paths.concat(opt.checkpoint_path, 'model.t7')
 opt.gif_file= paths.concat(opt.checkpoint_path, 'gifs/test.gif')
 opt.csv_file= paths.concat(opt.checkpoint_path, 'logs/test.log')
 local logger_tst = optim.Logger(opt.csv_file)
 opt.best = true
 opt.X11 = false
+epsilon = 0.05
 
 
 --- General setup.
@@ -55,8 +57,10 @@ local avg_best_q = 0
 while not terminal do
     -- if action was chosen randomly, Q-value is 0
     agent.bestq = 0
+    local is_exploitation
     -- choose the best action
-    local action_index = agent:perceive(reward, screen, terminal, true, 0.05)
+    local action_index, is_exploitation = 
+      agent:perceive(reward, screen, terminal, true, epsilon)
     -- play game in test mode (episodes don't end when losing a life)
     screen, reward, terminal = game_env:step(game_actions[action_index], false)
     total_reward = total_reward + reward
@@ -66,14 +70,15 @@ while not terminal do
     -- display screen
     if opt.X11 then image.display({image=screen, win=win}) end
     io.flush(print(string.format(
-      'step: %d, rewards: %f, total_rewards: %f, bestQ: %f, avg-bestQ: %f', 
-      step, reward, total_reward, agent.bestq, avg_best_q / step))) 
+      'step: %d, rewards: %f, total_rewards: %f, bestQ: %f, avg-bestQ: %f, exploidation: %d', 
+      step, reward, total_reward, agent.bestq, avg_best_q / step, is_exploitation))) 
     logger_tst:add{
       ['step'] = step,
       ['reward'] = reward,
       ['total_reward'] = total_reward,
       ['bestq'] = agent.bestq,
-      ['avg_bestq'] = avg_best_q / step
+      ['avg_bestq'] = avg_best_q / step,
+      ['exploidation'] = is_exploitation
     }
 
     -- create gd image from tensor
