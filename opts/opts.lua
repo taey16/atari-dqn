@@ -2,20 +2,33 @@
 require 'paths'
 
 local env_name = 
+  --'space_invaders'
   --'seaquest'
   'breakout'
-local rom_path = 'roms'
-local actrep = 4
+
 local agent_filename = 'NeuralQLearner'
 local agent_params = 
-  'lr=0.00025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3_no_bn\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
-local prog_freq = 10000--10000 --frequency of progress output
+  -- reinforce
+  'lr=0.000025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3_no_bn\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
+  -- initial lr=0.00025
+  --'lr=0.00025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3_no_bn\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
+
+-- frame-skipping technique
+local actrep = 4
+
+local reinforce = string.format(
+  '/storage/atari/%s/DQN3_0_1_breakout_FULL_Y_FULL/model.t7', env_name)
+local best = true
+
+local prog_freq = 25000--10000 --frequency of progress output
 local save_freq = 50000--125000 --the model is saved every save_freq steps
 local eval_freq = 50000--250000 --frequency of greedy evaluation
-local eval_steps= 10000--125000 --number of evaluation steps
+local eval_steps= 100000--125000 --number of evaluation steps
 
 local checkpoint_agent_name = 
-  'DQN3_0_1_FULL_Y_FULL'
+  'DQN3_0_1_FULL_Y_FULL_reinforce_lr25e-6'
+  --'DQN3_0_1_FULL_Y_FULL_reinforce'
+  --'DQN3_0_1_FULL_Y_FULL'
 local checkpoint_path = string.format('/storage/atari/%s/%s', env_name, checkpoint_agent_name)
 local X11 = false
 
@@ -27,15 +40,18 @@ cmd:text('Options:')
 
 cmd:option('-framework', 'alewrap', 'name of training framework')
 cmd:option('-env', env_name, 'name of environment to use')
-cmd:option('-game_path', rom_path, 'path to environment file (ROM)')
+cmd:option('-game_path', 'roms', 'path to environment file (ROM)')
 cmd:option('-env_params', 'useRGB=true', 'string of environment parameters')
 cmd:option('-pool_frms', 'type=\"max\",size=2',
   'string of frame pooling parameters (e.g.: size=2,type="max")')
-cmd:option('-actrep', actrep, 'how many times to repeat action')
+cmd:option('-actrep', actrep, 
+  'how many times to repeat action 
+    (Repeat each action selected by the agent this many time. 
+    Using a value of 4 results in the agent seeing only every 4th input frame.')
 cmd:option('-random_starts', 30, 'play action 0 between 1 and random_starts ' ..
   'number of times at the start of each training episode')
 
-cmd:option('-network', '', 'reload pretrained network')
+cmd:option('-network', reinforce, 'reload pretrained network')
 cmd:option('-agent', agent_filename, 'name of agent file to use')
 cmd:option('-agent_params', agent_params, 'string of agent parameters')
 cmd:option('-seed', 1, 'fixed input seed for repeatable experiments')
@@ -53,20 +69,24 @@ cmd:option('-verbose', 2,
   'the higher the level, the more information is printed to screen')
 cmd:option('-threads', 4, 'number of BLAS threads')
 cmd:option('-gpus', {1}, 'gpu flag')
---cmd:option('--checkpoint_agent_filename', checkpoint_agent_filename,
---  'checkpoint agent filename')
-cmd:option('-checkpoint_path', checkpoint_path, 'filename used for saving network and training history')
+cmd:option('-checkpoint_path', checkpoint_path, 
+  'filename used for saving network and training history')
 cmd:option('--X11', X11, 'use X11 or not')
+
+-- for test
+cmd:option('-best', best, 'select best_model in reinforce stage')
 
 cmd:text()
 
 local opts = cmd:parse(arg)
 os.execute('mkdir -p '..opts.checkpoint_path)
 print('===> Saving everything to: '..opts.checkpoint_path)
+--[[
 os.execute(string.format('mkdir -p %s/gifs',opts.checkpoint_path))
-os.execute(string.format('mkdir -p %s/csvs',opts.checkpoint_path))
+os.execute(string.format('mkdir -p %s/logs',opts.checkpoint_path))
 os.execute(string.format('cp opts/opts.lua %s', opts.checkpoint_path))
 os.execute(string.format('cp *.lua %s', opts.checkpoint_path))
+--]]
 io.flush()
 
 return opts
