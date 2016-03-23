@@ -20,7 +20,6 @@ opt.checkpoint_path =
 opt.network = paths.concat(opt.checkpoint_path, 'model.t7')
 opt.gif_file= paths.concat(opt.checkpoint_path, 'gifs/test.gif')
 opt.csv_file= paths.concat(opt.checkpoint_path, 'logs/test.log')
-local logger_tst = optim.Logger(opt.csv_file)
 opt.best = true
 opt.X11 = false
 epsilon = 0.05
@@ -28,34 +27,43 @@ epsilon = 0.05
 
 --- General setup.
 local game_env, game_actions, agent, opt = setup(opt)
--- start a new game
-local screen, reward, terminal = game_env:newGame()
 agent.network:evaluate()
 
--- compress screen to JPEG with 100% quality
-local jpg = image.compressJPG(screen:squeeze(), 100)
--- create gd image from JPEG string
-local im = gd.createFromJpegStr(jpg:storage():string())
--- convert truecolor to palette
-im:trueColorToPalette(false, 256)
--- file names from command line
-local gif_filename = opt.gif_file
--- write GIF header, use global palette and infinite looping
-im:gifAnimBegin(gif_filename, true, 0)
--- write first frame
-im:gifAnimAdd(gif_filename, false, 0, 0, 7, gd.DISPOSAL_NONE)
-
--- remember the image and show it first
-local previm = im
-local win
-if opt.X11 then win = image.display({image=screen}) end
-
 print("Started playing...")
-local step = 1
-local total_reward = 0
-local avg_best_q = 0
--- play one episode (game)
-while not terminal do
+local total_reward_per_episoid = 0
+local total_reward_per_episoid_history = {}
+local mean_reward = 0
+local n_episoid = 5
+for episoid_id = 1,n_episoid do
+  local step = 1
+  local avg_best_q = 0
+  local total_reward = 0
+
+  -- start a new game
+  print(string.format('Start a new %d th game...', episoid_id))
+  local screen, reward, terminal = game_env:newGame()
+  -- compress screen to JPEG with 100% quality
+  local jpg = image.compressJPG(screen:squeeze(), 100)
+  -- create gd image from JPEG string
+  local im = gd.createFromJpegStr(jpg:storage():string())
+  -- convert truecolor to palette
+  im:trueColorToPalette(false, 256)
+  -- file names from command line
+  local gif_filename = string.format('%s_%02d.gif', opt.gif_file, episoid_id)
+  -- write GIF header, use global palette and infinite looping
+  im:gifAnimBegin(gif_filename, true, 0)
+  -- write first frame
+  im:gifAnimAdd(gif_filename, false, 0, 0, 7, gd.DISPOSAL_NONE)
+  local csv_filename = string.format('%s_%02d.log', opt.csv_file, episoid_id)
+  local logger_tst = optim.Logger(csv_filename)
+
+  -- remember the image and show it first
+  local previm = im
+  local win
+  if opt.X11 then win = image.display({image=screen}) end
+
+  -- play one episode (game)
+  while not terminal do
     -- if action was chosen randomly, Q-value is 0
     agent.bestq = 0
     local is_exploitation
@@ -92,12 +100,26 @@ while not terminal do
     im:gifAnimAdd(gif_filename, false, 0, 0, 7, gd.DISPOSAL_NONE)
     -- remember previous screen for optimal compression
     previm = im
+  end
+  total_reward_per_episoid = total_reward_per_episoid + total_reward
+  mean_reward = total_reward_per_episoid / episoid_id
+  table.insert(total_reward_per_episoid_history, total_reward)
+
+  print(string.format(
+    '%d th game: total_reward: %d, avg_total_reward: %f', 
+    episoid_id, total_reward, mean_reward))
+
+  -- end GIF animation and close CSV file
+  gd.gifAnimEnd(gif_filename)
+  print("Finished game")
+  print(string.format('saved gif: %s', gif_filename))
+  print(string.format('saved csv: %s', csv_filename))
+  io.flush()
 end
 
--- end GIF animation and close CSV file
-gd.gifAnimEnd(gif_filename)
-
-print("Finished playing, close window to exit!")
-print(string.format('saved gif: %s', opt.gif_file))
-print(string.format('saved csv: %s', opt.csv_file))
-io.flush()
+local std_reward = 0
+for ep=1,#total_reward_per_episoid_history do
+  std_reward = std_reward + math.abs(mean_reward - total_reward_per_episoid_history[ep]) 
+end
+print(string.format('std_reward: %f', std_reward / #total_reward_per_episoid_history))
+print('Done')
