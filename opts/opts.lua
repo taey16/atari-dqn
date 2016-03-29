@@ -9,20 +9,22 @@ local env_name =
 local agent_filename = 'NeuralQLearner'
 local agent_params = 
   -- reinforce
-  --'lr=0.000025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
+  'lr=0.000025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
   -- initial lr=0.00025
-  'lr=0.00025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
+  --'lr=0.00025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
 
 -- frame-skipping technique
 local actrep = 4
 
 local reinforce = 
-  ''
-  --string.format(
-  --  '/storage/atari/%s/DQN3_0_1_breakout_FULL_Y_FULL/model.t7', env_name)
+  string.format(
+    --'')
+    --'/storage/atari/%s/DQN3_0_1_breakout_FULL_Y_FULL/model.t7', env_name)
+    --'/storage/atari/%s/DQN3_0_1_seaquest_FULL_Y_FULL/model.t7', env_name)
+    '/storage/atari/%s/DQN3_0_1_FULL_Y_FULL/model.t7', env_name)
 local best = true
 
-local prog_freq = 25000--10000 --frequency of progress output
+local prog_freq = 50000--10000 --frequency of progress output
 local save_freq = 250000--125000 --the model is saved every save_freq steps
 local eval_freq = 250000 --frequency of greedy evaluation
 local eval_steps= 135000--125000 --number of evaluation steps
@@ -30,8 +32,7 @@ local eval_steps= 135000--125000 --number of evaluation steps
 local checkpoint_agent_name = 
   --'DQN3_0_1_FULL_Y_FULL_reinforce_lr25e-6'
   --'DQN3_0_1_FULL_Y_FULL_reinforce'
-  --'DQN3_0_1_FULL_Y_FULL'
-  'DQN3_0_1_FULL_Y_FULL_BN'
+  'DQN3_0_1_FULL_Y_FULL'
 local checkpoint_path = 
   string.format('/storage/atari/%s/%s', env_name, checkpoint_agent_name)
 local X11 = false
