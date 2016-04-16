@@ -2,13 +2,14 @@
 require 'paths'
 
 local env_name = 
-  'space_invaders'
+  --'space_invaders'
   --'seaquest'
   --'breakout'
+  'pong'
 
 local agent_filename = 'NeuralQLearner'
 local agent_params = 
-  -- reinforce
+  -- explict reinforce
   'lr=0.000025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
   -- initial lr=0.00025
   --'lr=0.00025,eq=1,ep_end=0.1,ep_endt=replay_memory,discount=0.99,hist_len=4,learn_start=50000,replay_memory=1000000,update_freq=4,n_replay=1,network=\"convnet_atari3\",preproc=\"net_downsample_2x_full_y\",state_dim=7056,minibatch_size=32,rescale_r=1,ncols=1,bufferSize=512,valid_size=500,target_q=10000,clip_delta=1,min_reward=-1,max_reward=1'
@@ -30,9 +31,9 @@ local eval_freq = 250000 --frequency of greedy evaluation
 local eval_steps= 135000--125000 --number of evaluation steps
 
 local checkpoint_agent_name = 
-  --'DQN3_0_1_FULL_Y_FULL_reinforce_lr25e-6'
+  'DQN3_0_1_FULL_Y_FULL_reinforce_lr25e-6'
   --'DQN3_0_1_FULL_Y_FULL_reinforce'
-  'DQN3_0_1_FULL_Y_FULL'
+  --'DQN3_0_1_FULL_Y_FULL'
 local checkpoint_path = 
   string.format('/storage/atari/%s/%s', env_name, checkpoint_agent_name)
 local X11 = false
