@@ -234,8 +234,6 @@ function nql:getQUpdate(args)
 
   if self.clip_delta then
     delta:clamp(-self.clip_delta, self.clip_delta)
-    --delta[delta:ge(self.clip_delta)] = self.clip_delta
-    --delta[delta:le(-self.clip_delta)] = -self.clip_delta
   end
 
   local targets = torch.zeros(self.minibatch_size, self.n_actions):float()
@@ -324,7 +322,7 @@ function nql:perceive(reward, rawstate, terminal, testing, testing_ep)
 
   self.transitions:add_recent_state(state, terminal)
 
-  local currentFullState = self.transitions:get_recent()
+  --local currentFullState = self.transitions:get_recent()
 
   --Store transition s, a, r, s'
   if self.lastState and not testing then

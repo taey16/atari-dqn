@@ -292,26 +292,26 @@ end
 
 
 function trans:add_recent_state(s, term)
-    local s = s:clone():float():mul(255):byte()
-    if #self.recent_s == 0 then
-        for i=1,self.recentMemSize do
-            table.insert(self.recent_s, s:clone():zero())
-            table.insert(self.recent_t, 1)
-        end
+  local s = s:clone():float():mul(255):byte()
+  if #self.recent_s == 0 then
+    for i=1,self.recentMemSize do
+      table.insert(self.recent_s, s:clone():zero())
+      table.insert(self.recent_t, 1)
     end
+  end
 
-    table.insert(self.recent_s, s)
-    if term then
-        table.insert(self.recent_t, 1)
-    else
-        table.insert(self.recent_t, 0)
-    end
+  table.insert(self.recent_s, s)
+  if term then
+    table.insert(self.recent_t, 1)
+  else
+    table.insert(self.recent_t, 0)
+  end
 
-    -- Keep recentMemSize states.
-    if #self.recent_s > self.recentMemSize then
-        table.remove(self.recent_s, 1)
-        table.remove(self.recent_t, 1)
-    end
+  -- Keep recentMemSize states.
+  if #self.recent_s > self.recentMemSize then
+    table.remove(self.recent_s, 1)
+    table.remove(self.recent_t, 1)
+  end
 end
 
 
