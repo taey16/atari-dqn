@@ -5,7 +5,8 @@ local env_name =
   --'space_invaders'
   --'seaquest'
   --'breakout'
-  'pong'
+  --'pong'
+  'qbert'
 
 local agent_filename = 'NeuralQLearner'
 local agent_params = 
@@ -22,7 +23,7 @@ local reinforce =
     --'')
     --'/storage/atari/%s/DQN3_0_1_breakout_FULL_Y_FULL/model.t7', env_name)
     --'/storage/atari/%s/DQN3_0_1_seaquest_FULL_Y_FULL/model.t7', env_name)
-    '/storage/atari/%s/DQN3_0_1_FULL_Y_FULL/model.t7', env_name)
+    '/storage/atari/%s/DQN3_0_1_FULL_Y/model.t7', env_name)
 local best = true
 
 local prog_freq = 50000--10000 --frequency of progress output
@@ -31,9 +32,10 @@ local eval_freq = 250000 --frequency of greedy evaluation
 local eval_steps= 135000--125000 --number of evaluation steps
 
 local checkpoint_agent_name = 
-  'DQN3_0_1_FULL_Y_FULL_reinforce_lr25e-6'
+  'DQN3_0_1_FULL_Y_reinforce_lr25e-6'
+  --'DQN3_0_1_FULL_Y_FULL_reinforce_lr25e-6'
   --'DQN3_0_1_FULL_Y_FULL_reinforce'
-  --'DQN3_0_1_FULL_Y_FULL'
+  --'DQN3_0_1_FULL_Y'
 local checkpoint_path = 
   string.format('/storage/atari/%s/%s', env_name, checkpoint_agent_name)
 local X11 = false
