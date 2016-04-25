@@ -130,7 +130,7 @@ function trans:sample_one(priority)
         index = self.priority_indices[torch.random(1, #self.priority_indices)]
       end
       -- to account for histSize
-      index = index = self.recentMemSize + 1
+      index = self.recentMemSize + 1
       print("Choosing priority action", index, #self.priority_indices)
     else
       -- random sampling
