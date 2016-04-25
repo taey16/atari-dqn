@@ -131,7 +131,7 @@ function trans:sample_one(priority)
       end
       -- to account for histSize
       index = self.recentMemSize + 1
-      print("Choosing priority action", index, #self.priority_indices)
+      --print("Choosing priority action", index, #self.priority_indices)
     else
       -- random sampling
       -- start at 2 because of previous action
@@ -319,7 +319,7 @@ function trans:add(s, a, r, term)
 
     --add to priorityIndices if reward is positive
     if r > 0 then
-        print("adding priority index", self.insertIndex, #self.priority_indices)
+        --print("adding priority index", self.insertIndex, #self.priority_indices)
         table.insert(self.priority_indices, self.insertIndex)
     end
 end
