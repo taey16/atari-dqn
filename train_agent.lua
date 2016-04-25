@@ -56,8 +56,9 @@ while step < opt.steps do
   if opt.X11 then win = image.display({image=screen, win=win}) end
 
   if step % opt.prog_freq == 0 then
-    assert(step==agent.numSteps, 'trainer step: ' .. step ..
-        ' & agent.numSteps: ' .. agent.numSteps)
+    assert(step==agent.numSteps, 
+      'trainer step: ' .. step ..  
+      ' & agent.numSteps: ' .. agent.numSteps)
     io.flush(print("Steps: ", step))
     agent:report()
     --io.flush(print(string.format(
