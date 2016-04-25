@@ -17,8 +17,9 @@ opt.env_name =
   'qbert'
 opt.checkpoint_path = 
   --('/storage/atari/%s/DQN3_0_1_FULL_Y_FULL_reinforce_lr25e-6'):format( opt.env_name, opt.env_name )
+  ('/storage/atari/%s/DQN3_0_1_FULL_Y_reinforce_lr25e-6'):format( opt.env_name, opt.env_name )
   --('/storage/atari/%s/DQN3_0_1_FULL_Y_FULL_reinforce'):format( opt.env_name, opt.env_name )
-  ('/storage/atari/%s/DQN3_0_1_FULL_Y'):format( opt.env_name, opt.env_name )
+  --('/storage/atari/%s/DQN3_0_1_FULL_Y'):format( opt.env_name, opt.env_name )
   --('/storage/atari/%s/DQN3_0_1_FULL_Y_FULL'):format( opt.env_name, opt.env_name )
   --('/storage/atari/%s/DQN3_0_1_%s_FULL_Y_FULL'):format( opt.env_name, opt.env_name )
 opt.network = paths.concat(opt.checkpoint_path, 'model.t7')
