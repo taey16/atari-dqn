@@ -17,6 +17,7 @@ local logger_val_avg =
 local game_env, game_actions, agent, opt = setup(opt)
 agent.network:training()
 
+local priority = false
 local learn_start = agent.learn_start
 local start_time = sys.clock()
 local reward_counts = {}
@@ -40,7 +41,7 @@ local screen, reward, terminal = game_env:getState()
 io.flush(print("===> Iteration ..", step))
 while step < opt.steps do
   step = step + 1
-  local action_index = agent:perceive(reward, screen, terminal)
+  local action_index = agent:perceive(reward, screen, terminal, priority)
   if not terminal then
     screen, reward, terminal = 
       game_env:step(game_actions[action_index], true)

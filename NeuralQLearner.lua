@@ -57,6 +57,9 @@ function nql:__init(args)
   self.bestq          = 0
 
 
+  self.priority_ratio = args.priority_ratio or 0
+
+
   self.ncols          = args.ncols or 1  -- number of color channels in input
   self.input_dims     = args.input_dims or {self.hist_len*self.ncols, 84, 84}
   self.preproc        = args.preproc  -- name of preprocessing network
@@ -252,7 +255,9 @@ function nql:qLearnMinibatch()
   -- w += alpha * (r + gamma max Q(s2,a2) - Q(s,a)) * dQ(s,a)/dw
   assert(self.transitions:size() > self.minibatch_size)
 
-  local s, a, r, s2, term = self.transitions:sample(self.minibatch_size)
+  -- fraction of samples from 'priority' transitions
+  --local priority_ratio = 0.25
+  local s, a, r, s2, term = self.transitions:sample(self.minibatch_size, self.priority_ratio)
 
   local targets, delta, q2_max = 
     self:getQUpdate{s=s, a=a, r=r, s2=s2, term=term, update_qmax=true}
