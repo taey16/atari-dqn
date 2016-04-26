@@ -53,6 +53,7 @@ while step < opt.steps do
     end
   end
 
+
   if opt.X11 then display_screen = image.display({image=screen, win=display_screen}) end
 
   if step % opt.prog_freq == 0 then
@@ -61,9 +62,11 @@ while step < opt.steps do
       ' & agent.numSteps: ' .. agent.numSteps)
     io.flush(print("Steps: ", step))
     agent:report()
-    --io.flush(print(string.format(
-    --  '%d, action idx: %d, reward: %f', step, action_index, reward)))
     collectgarbage()
+    --[[
+    io.flush(print(string.format(
+      '%d, action idx: %d, reward: %f', step, action_index, reward)))
+    --]]
   end
 
   if step % 1000 == 0 then collectgarbage() end
