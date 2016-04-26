@@ -256,7 +256,6 @@ function nql:qLearnMinibatch()
   assert(self.transitions:size() > self.minibatch_size)
 
   -- fraction of samples from 'priority' transitions
-  --local priority_ratio = 0.25
   local s, a, r, s2, term = self.transitions:sample(self.minibatch_size, self.priority_ratio)
 
   local targets, delta, q2_max = 
