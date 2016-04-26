@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 
 ######################################################################
@@ -5,10 +6,8 @@
 ######################################################################
 
 
-TOPDIR=$PWD
-
 # Prefix:
-PREFIX=$PWD/torch
+PREFIX=$HOME/torch
 echo "Installing Torch into: $PREFIX"
 
 if [[ `uname` != 'Linux' ]]; then
@@ -34,8 +33,6 @@ sudo apt-get install -qqy ncurses-dev
 sudo apt-get install -qqy imagemagick
 sudo apt-get install -qqy unzip
 sudo apt-get install -qqy libqt4-dev
-sudo apt-get install -qqy liblua5.1-0-dev
-sudo apt-get install -qqy libgd-dev
 sudo apt-get update
 
 
@@ -46,7 +43,8 @@ echo "==> Torch7's dependencies have been installed"
 
 
 # Build and install Torch7
-cd /tmp
+mkdir -p $PREFIX/src
+cd $PREFIX/src
 rm -rf luajit-rocks
 git clone https://github.com/torch/luajit-rocks.git
 cd luajit-rocks
@@ -88,6 +86,7 @@ $PREFIX/bin/luarocks install image
 $PREFIX/bin/luarocks install env
 $PREFIX/bin/luarocks install qtlua
 $PREFIX/bin/luarocks install qttorch
+$PREFIX/bin/luarocks install luagd
 
 echo ""
 echo "=> Torch7 has been installed successfully"
@@ -100,30 +99,30 @@ RET=$?; if [ $RET -ne 0 ]; then echo "Error. Exiting."; exit $RET; fi
 echo "nngraph installation completed"
 
 echo "Installing Xitari ... "
-cd /tmp
+cd $PREFIX/src
 rm -rf xitari
-git clone https://github.com/deepmind/xitari.git
+git clone https://github.com/NeuroCSUT/Xitari2Player.git xitari
 cd xitari
 $PREFIX/bin/luarocks make
 RET=$?; if [ $RET -ne 0 ]; then echo "Error. Exiting."; exit $RET; fi
 echo "Xitari installation completed"
 
 echo "Installing Alewrap ... "
-cd /tmp
+cd $PREFIX/src
 rm -rf alewrap
-git clone https://github.com/deepmind/alewrap.git
+git clone https://github.com/NeuroCSUT/Alewrap2Player.git alewrap
 cd alewrap
 $PREFIX/bin/luarocks make
 RET=$?; if [ $RET -ne 0 ]; then echo "Error. Exiting."; exit $RET; fi
 echo "Alewrap installation completed"
 
 echo "Installing Lua-GD ... "
-mkdir $PREFIX/src
 cd $PREFIX/src
 rm -rf lua-gd
 git clone https://github.com/ittner/lua-gd.git
 cd lua-gd
-sed -i "s/LUABIN=lua5.1/LUABIN=..\/..\/bin\/luajit/" Makefile
+sed -i 's/LUABIN=lua5.1/LUABIN=..\/..\/bin\/luajit/' Makefile
+sed -i 's/`pkg-config \$(LUAPKG) --cflags`/-I..\/..\/include/' Makefile
 $PREFIX/bin/luarocks make
 RET=$?; if [ $RET -ne 0 ]; then echo "Error. Exiting."; exit $RET; fi
 echo "Lua-GD installation completed"
@@ -139,4 +138,3 @@ echo "   ./run_gpu game_name"
 echo
 echo "For this you need to provide the rom files of the respective games (game_name.bin) in the roms/ directory"
 echo
-
