@@ -20,6 +20,7 @@ if [[ `which apt-get` == '' ]]; then
 fi
 
 # Install dependencies for Torch:
+# opt -qqy means no installation stdout
 sudo apt-get update
 sudo apt-get install -qqy build-essential
 sudo apt-get install -qqy gcc g++

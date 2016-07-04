@@ -2,7 +2,9 @@
 require 'paths'
 
 -- priorised sampling
-local priority_ratio = 0.25
+local priority_ratio = 
+  --0.0
+  0.25
 -- frame-skipping technique
 local actrep = 4
 local agent_params = 
@@ -17,7 +19,9 @@ local env_name =
   --'seaquest'
   --'breakout'
   --'pong'
-  'qbert'
+  --'qbert'
+  --'beam_rider'
+  'enduro'
 local agent_filename = 'NeuralQLearner'
 
 
