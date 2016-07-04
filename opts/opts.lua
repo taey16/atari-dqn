@@ -35,11 +35,11 @@ local eval_freq = 250000 --frequency of greedy evaluation
 local eval_steps= 135000--125000 --number of evaluation steps
 
 local checkpoint_agent_name = 
-  --'DQN3_0_1_FULL_Y_reinforce_lr25e-6'
+  'DQN3_0_1_FULL_Y_reinforce_lr25e-6'
   --'DQN3_0_1_FULL_Y_FULL_reinforce_lr25e-6'
   --'DQN3_0_1_FULL_Y_FULL_reinforce'
   --'DQN3_0_1_FULL_Y'
-  string.format('DQN3_0_1_FULL_Y_priority%.2f', priority_ratio)
+  --string.format('DQN3_0_1_FULL_Y_priority%.2f', priority_ratio)
 local checkpoint_path = 
   string.format('/storage/atari/%s/%s', env_name, checkpoint_agent_name)
 local X11 = false
