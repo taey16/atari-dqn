@@ -5,6 +5,9 @@ See LICENSE file for full terms of limited license.
 
 require "initenv"
 require 'cudnn'
+cudnn.fastest = true
+cudnn.benchmark = true
+cudnn.verbose = true
 
 function create_network(args)
   local net = nn.Sequential()
