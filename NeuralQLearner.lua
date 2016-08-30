@@ -8,6 +8,7 @@ if not dqn then
 end
 
 require 'paths'
+require 'GradientRescale'
 paths.dofile('init_model_weight.lua')
 local parallel_utils = require 'parallel_utils'
 local nql = torch.class('dqn.NeuralQLearner')
