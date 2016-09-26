@@ -15,12 +15,12 @@ opt.env_name =
   --'seaquest'
   --'breakout'
   --'pong'
-  'qbert'
-  --'beam_rider'
+  --'qbert'
+  'beam_rider'
   --'enduro'
 opt.checkpoint_path = 
-  ('/storage/atari/%s/DQN3_0_1_FULL_Y_DUAL_reinforce_lr25e-6'):format( opt.env_name, opt.env_name )
-  --('/storage/atari/%s/DQN3_0_1_FULL_Y_DUAL'):format( opt.env_name, opt.env_name )
+  --('/storage/atari/%s/DQN3_0_1_FULL_Y_DUAL_reinforce_lr25e-6'):format( opt.env_name, opt.env_name )
+  ('/storage/atari/%s/DQN3_0_1_FULL_Y_DUAL'):format( opt.env_name, opt.env_name )
   --('/storage/atari/%s/DQN3_0_1_FULL_Y'):format( opt.env_name, opt.env_name )
   --('/storage/atari/%s/DQN3_0_1_FULL_Y_reinforce_lr25e-6'):format( opt.env_name, opt.env_name )
 opt.network = paths.concat(opt.checkpoint_path, 'model.t7')
@@ -28,7 +28,7 @@ opt.gif_file= paths.concat(opt.checkpoint_path, 'gifs/test.gif')
 opt.csv_file= paths.concat(opt.checkpoint_path, 'logs/test.log')
 opt.best = true
 opt.X11 = false
-epsilon = 0.00
+epsilon = 0.0005
 
 
 --- General setup.

@@ -19,8 +19,8 @@ local env_name =
   --'seaquest'
   --'breakout'
   --'pong'
-  'qbert'
-  --'beam_rider'
+  --'qbert'
+  'beam_rider'
   --'enduro'
 local agent_filename = 'NeuralQLearner'
 
@@ -38,7 +38,8 @@ local eval_freq = 250000 --frequency of greedy evaluation
 local eval_steps= 135000--125000 --number of evaluation steps
 
 local checkpoint_agent_name = 
-  'DQN3_0_1_FULL_Y_DUAL_reinforce_lr25e-6'
+  --'DQN3_0_1_FULL_Y_DUAL_reinforce_lr25e-6'
+  'DQN3_0_1_FULL_Y_DUAL_lr25e-6'
   --'DQN3_0_1_FULL_Y_reinforce_lr25e-6'
   --string.format('DQN3_0_1_FULL_Y_priority%.2f', priority_ratio)
 local checkpoint_path = 
